@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<main>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+<body>
+        <nav class="col-12">
+            <div class="row">
+                <div class="col-md text-left text-capitalize">
+                    <h1>Welcome, Agent {{user.first_name}}!</h1>
+                </div>
+                <div>
+                    <a style="text-decoration:underline;" href="/new/picks" >Add Client</a>
+                    <a style="text-decoration:underline;" href="/logout" >Logout</a>
+                </div>
+            </div>
+        </nav>
+        <div class="col-10 p-5">
+            <h2>All Clients</h2>
+                <div style="overflow:scroll;">
+                    <table class="table table-bordered table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">Client Name</th>
+                                <th scope="col">Number</th>
+                                <th scope="col">Bet-Size</th>
+                                <th scope="col">Agent</th>
+                                <th scope="col">Record</th>
+                                <th scope="col">Date Added</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for picks in pick %}
+                                <tr>
+                                        <td><a style="text-decoration:underline;"  href="/pick/{{picks.id}}">{{picks.name}}</a></td>
+                                        <td>{{picks.number}}</td>
+                                        <td>{{picks.bet}}</td>
+                                        {% if user.id == picks.user_id %}
+                                            <td>{{user.first_name}}</td>
+                                        {% else %}
+                                            <td>Another Agents client</td>
+                                        {% endif %}
+                                        <td>{{picks.record}}</td>
+                                        <td>{{picks.date.strftime('%m/%d/%Y')}}</td>
+                                    <td>
+                                        <div>
+                                            {% if user.id == picks.user_id %}
+                                                <button><a href="/edit/{{picks.id}}">Edit</a></button>
+                                                <button><a href="/destroy/{{picks.id}}">Delete</a></button>
+                                            {% else %}
+                                                <button><a href="/pick/{{picks.id}}">View</a></button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+</body>
+</main>
+</html>
